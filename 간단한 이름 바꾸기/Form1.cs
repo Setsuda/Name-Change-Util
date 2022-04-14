@@ -179,7 +179,7 @@ namespace 간단한_이름_바꾸기
                 for (int i = 0; i < files.Length; i++)
                 {
                     //  파일명
-                    string fileName = GetFileName(files[i], false);
+                    string fileName = GetFileName(files[i], false).Trim();
                     //  확장자
                     string ext = GetExt(files[i], true);
                     //  경로
@@ -238,7 +238,11 @@ namespace 간단한_이름_바꾸기
 
                         }
 
-                        if(positionChangeStartIndex >=0 && positionChangeLength > 0) 
+                        bool positionChangeUse = true;
+                        if (ckbPositionChangeFirst.Checked == true && positionChangeStartIndex != 0) positionChangeUse = false;
+                        if (ckbPositionChangeLast.Checked == true && positionChangeEndIndex != fileName.Length - 1) positionChangeUse = false;
+
+                        if (positionChangeUse == true && positionChangeStartIndex >= 0 && positionChangeLength > 0) 
                         {
                             string positionChangeStr = fileName.Substring(positionChangeStartIndex, positionChangeLength);
 
@@ -489,6 +493,29 @@ namespace 간단한_이름_바꾸기
             cbxPositionChangeStart.Enabled = ckbPositionChange.Checked;
             cbxPositionChangeEnd.Enabled = ckbPositionChange.Checked;
             gpbPositionChange.Enabled = ckbPositionChange.Checked;
+            ckbPositionChangeFirst.Enabled = ckbPositionChange.Checked;
+            ckbPositionChangeLast.Enabled = ckbPositionChange.Checked;
+
+        }
+
+        /// <summary>
+        /// 구간 위치 변경 머리말 한정 체크
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ckbPositionChangeFirst_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ckbPositionChangeFirst.Checked == true) ckbPositionChangeLast.Checked = false;
+        }
+
+        /// <summary>
+        /// 구간 위치 변경 꼬리말 한정 체크
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ckbPositionChangeLast_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ckbPositionChangeLast.Checked == true) ckbPositionChangeFirst.Checked = false;
 
         }
 
@@ -612,7 +639,10 @@ namespace 간단한_이름_바꾸기
             AddComboxData(ConfigData.lstPositionChangeStart, cbxPositionChangeStart);
             //  구간 위치 변경 단어끝 이력
             AddComboxData(ConfigData.lstPositionChangeEnd, cbxPositionChangeEnd);
-
+            //  구간 위치 변경 머리말 한정 체크
+            ckbPositionChangeFirst.Checked = ConfigData.isPositionChangeFirst;
+            //  구간 위치 변경 꼬리말 한정 체크
+            ckbPositionChangeLast.Checked = ConfigData.isPositionChangeLast;
 
             //  변경전 문자 이력
             AddComboxData(ConfigData.lstBeforeText, cbxBeforeText);
@@ -927,6 +957,5 @@ namespace 간단한_이름_바꾸기
             return rtn;
         }
 
-        
     }
 }

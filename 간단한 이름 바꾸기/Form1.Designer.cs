@@ -67,6 +67,8 @@
             this.gpbPositionChange = new System.Windows.Forms.GroupBox();
             this.rdbPositionChangeFirst = new System.Windows.Forms.RadioButton();
             this.rdbPositionChangeLast = new System.Windows.Forms.RadioButton();
+            this.ckbPositionChangeFirst = new System.Windows.Forms.CheckBox();
+            this.ckbPositionChangeLast = new System.Windows.Forms.CheckBox();
             this.gpbCount.SuspendLayout();
             this.gpbPositionChange.SuspendLayout();
             this.SuspendLayout();
@@ -502,11 +504,37 @@
             this.rdbPositionChangeLast.Text = "뒤로";
             this.rdbPositionChangeLast.UseVisualStyleBackColor = true;
             // 
+            // ckbPositionChangeFirst
+            // 
+            this.ckbPositionChangeFirst.AutoSize = true;
+            this.ckbPositionChangeFirst.Enabled = false;
+            this.ckbPositionChangeFirst.Location = new System.Drawing.Point(318, 371);
+            this.ckbPositionChangeFirst.Name = "ckbPositionChangeFirst";
+            this.ckbPositionChangeFirst.Size = new System.Drawing.Size(60, 16);
+            this.ckbPositionChangeFirst.TabIndex = 213;
+            this.ckbPositionChangeFirst.Text = "머리말";
+            this.ckbPositionChangeFirst.UseVisualStyleBackColor = true;
+            this.ckbPositionChangeFirst.CheckedChanged += new System.EventHandler(this.ckbPositionChangeFirst_CheckedChanged);
+            // 
+            // ckbPositionChangeLast
+            // 
+            this.ckbPositionChangeLast.AutoSize = true;
+            this.ckbPositionChangeLast.Enabled = false;
+            this.ckbPositionChangeLast.Location = new System.Drawing.Point(389, 371);
+            this.ckbPositionChangeLast.Name = "ckbPositionChangeLast";
+            this.ckbPositionChangeLast.Size = new System.Drawing.Size(48, 16);
+            this.ckbPositionChangeLast.TabIndex = 216;
+            this.ckbPositionChangeLast.Text = "끝말";
+            this.ckbPositionChangeLast.UseVisualStyleBackColor = true;
+            this.ckbPositionChangeLast.CheckedChanged += new System.EventHandler(this.ckbPositionChangeLast_CheckedChanged);
+            // 
             // ChangeName
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(560, 643);
+            this.Controls.Add(this.ckbPositionChangeLast);
+            this.Controls.Add(this.ckbPositionChangeFirst);
             this.Controls.Add(this.gpbPositionChange);
             this.Controls.Add(this.cbxPositionChangeEnd);
             this.Controls.Add(this.cbxPositionChangeStart);
@@ -592,6 +620,8 @@
         private System.Windows.Forms.GroupBox gpbPositionChange;
         private System.Windows.Forms.RadioButton rdbPositionChangeFirst;
         private System.Windows.Forms.RadioButton rdbPositionChangeLast;
+        private System.Windows.Forms.CheckBox ckbPositionChangeFirst;
+        private System.Windows.Forms.CheckBox ckbPositionChangeLast;
     }
 }
 
