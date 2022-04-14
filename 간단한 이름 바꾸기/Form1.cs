@@ -238,21 +238,25 @@ namespace 간단한_이름_바꾸기
 
                         }
 
-                        string positionChangeStr = fileName.Substring(positionChangeStartIndex, positionChangeLength);
-
-                        string tempFileName = fileName.Substring(0, positionChangeStartIndex);
-                        if (fileName.Length > positionChangeEndIndex) tempFileName += fileName.Substring(positionChangeEndIndex + 1);
-                        fileName = tempFileName.Trim();
-
-
-
-                        if (rdbPositionChangeFirst.Checked == true)
+                        if(positionChangeStartIndex >=0 && positionChangeLength > 0) 
                         {
-                            fileName = positionChangeStr + fileName;
-                        }
-                        else
-                        {
-                            fileName = fileName + positionChangeStr;
+                            string positionChangeStr = fileName.Substring(positionChangeStartIndex, positionChangeLength);
+
+                            string tempFileName = fileName.Substring(0, positionChangeStartIndex);
+                            if (fileName.Length > positionChangeEndIndex) tempFileName += fileName.Substring(positionChangeEndIndex + 1);
+                            fileName = tempFileName.Trim();
+
+
+
+                            if (rdbPositionChangeFirst.Checked == true)
+                            {
+                                fileName = positionChangeStr + fileName;
+                            }
+                            else
+                            {
+                                fileName = fileName + positionChangeStr;
+                            }
+
                         }
                     }
 
