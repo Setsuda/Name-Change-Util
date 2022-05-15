@@ -53,17 +53,19 @@ namespace 간단한_이름_바꾸기.Models
         public List<string> lstPositionChangeStart = new List<string>();
         /// <summary>구간 위치 변경 단어끝</summary>
         public List<string> lstPositionChangeEnd = new List<string>();
+        /// <summary>구간 위치 변경 머리말 한정 판단</summary>
+        public bool isPositionChangeFirst = false;
+        /// <summary>구간 위치 변경 꼬리말 한정 판단</summary>
+        public bool isPositionChangeLast = false;
 
+
+        /// <summary>문자 변경 사용판단</summary>
+        public bool isTextChange = false;
         /// <summary>변경 전 문자</summary>
         public List<string> lstBeforeText = new List<string>();
         /// <summary>변경 후 내용</summary>
         public List<string> lstAfterText = new List<string>();
 
-        
-        /// <summary>구간 위치 변경 머리말 한정 판단</summary>
-        public bool isPositionChangeFirst = false;
-        /// <summary>구간 위치 변경 꼬리말 한정 판단</summary>
-        public bool isPositionChangeLast = false;
 
         /// <summary>
         /// ConfigData 콘스트럭터

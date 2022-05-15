@@ -66,7 +66,7 @@
             this.btnRestoration.Location = new System.Drawing.Point(311, 85);
             this.btnRestoration.Name = "btnRestoration";
             this.btnRestoration.Size = new System.Drawing.Size(93, 23);
-            this.btnRestoration.TabIndex = 6;
+            this.btnRestoration.TabIndex = 20;
             this.btnRestoration.Text = "복원";
             this.btnRestoration.UseVisualStyleBackColor = true;
             this.btnRestoration.Click += new System.EventHandler(this.btnRestoration_Click);
@@ -76,7 +76,7 @@
             this.BtnOK.Location = new System.Drawing.Point(425, 85);
             this.BtnOK.Name = "BtnOK";
             this.BtnOK.Size = new System.Drawing.Size(93, 23);
-            this.BtnOK.TabIndex = 7;
+            this.BtnOK.TabIndex = 10;
             this.BtnOK.Text = "완료";
             this.BtnOK.UseVisualStyleBackColor = true;
             this.BtnOK.Click += new System.EventHandler(this.BtnOK_Click);

@@ -69,6 +69,7 @@
             this.rdbPositionChangeLast = new System.Windows.Forms.RadioButton();
             this.ckbPositionChangeFirst = new System.Windows.Forms.CheckBox();
             this.ckbPositionChangeLast = new System.Windows.Forms.CheckBox();
+            this.ckbTextChange = new System.Windows.Forms.CheckBox();
             this.gpbCount.SuspendLayout();
             this.gpbPositionChange.SuspendLayout();
             this.SuspendLayout();
@@ -146,24 +147,24 @@
             // lblBeforeText
             // 
             this.lblBeforeText.AutoSize = true;
-            this.lblBeforeText.Location = new System.Drawing.Point(11, 495);
+            this.lblBeforeText.Location = new System.Drawing.Point(11, 524);
             this.lblBeforeText.Name = "lblBeforeText";
-            this.lblBeforeText.Size = new System.Drawing.Size(57, 12);
+            this.lblBeforeText.Size = new System.Drawing.Size(73, 12);
             this.lblBeforeText.TabIndex = 20;
-            this.lblBeforeText.Text = "바꿀 문자";
+            this.lblBeforeText.Text = "변경 전 문자";
             // 
             // lblAfterText
             // 
             this.lblAfterText.AutoSize = true;
-            this.lblAfterText.Location = new System.Drawing.Point(12, 549);
+            this.lblAfterText.Location = new System.Drawing.Point(12, 578);
             this.lblAfterText.Name = "lblAfterText";
-            this.lblAfterText.Size = new System.Drawing.Size(61, 12);
+            this.lblAfterText.Size = new System.Drawing.Size(77, 12);
             this.lblAfterText.TabIndex = 22;
-            this.lblAfterText.Text = "바꿀 내용 ";
+            this.lblAfterText.Text = "변경 후 문자 ";
             // 
             // btnCalcel
             // 
-            this.btnCalcel.Location = new System.Drawing.Point(373, 604);
+            this.btnCalcel.Location = new System.Drawing.Point(373, 633);
             this.btnCalcel.Name = "btnCalcel";
             this.btnCalcel.Size = new System.Drawing.Size(75, 23);
             this.btnCalcel.TabIndex = 1020;
@@ -173,7 +174,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(468, 604);
+            this.btnOK.Location = new System.Drawing.Point(468, 633);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 1030;
@@ -374,7 +375,7 @@
             // cbxBeforeText
             // 
             this.cbxBeforeText.FormattingEnabled = true;
-            this.cbxBeforeText.Location = new System.Drawing.Point(13, 510);
+            this.cbxBeforeText.Location = new System.Drawing.Point(13, 539);
             this.cbxBeforeText.Name = "cbxBeforeText";
             this.cbxBeforeText.Size = new System.Drawing.Size(531, 20);
             this.cbxBeforeText.TabIndex = 1000;
@@ -382,7 +383,7 @@
             // cbxAfterText
             // 
             this.cbxAfterText.FormattingEnabled = true;
-            this.cbxAfterText.Location = new System.Drawing.Point(12, 564);
+            this.cbxAfterText.Location = new System.Drawing.Point(12, 593);
             this.cbxAfterText.Name = "cbxAfterText";
             this.cbxAfterText.Size = new System.Drawing.Size(531, 20);
             this.cbxAfterText.TabIndex = 1010;
@@ -478,7 +479,7 @@
             this.gpbPositionChange.Location = new System.Drawing.Point(122, 360);
             this.gpbPositionChange.Name = "gpbPositionChange";
             this.gpbPositionChange.Size = new System.Drawing.Size(168, 35);
-            this.gpbPositionChange.TabIndex = 26;
+            this.gpbPositionChange.TabIndex = 195;
             this.gpbPositionChange.TabStop = false;
             // 
             // rdbPositionChangeFirst
@@ -528,11 +529,25 @@
             this.ckbPositionChangeLast.UseVisualStyleBackColor = true;
             this.ckbPositionChangeLast.CheckedChanged += new System.EventHandler(this.ckbPositionChangeLast_CheckedChanged);
             // 
+            // ckbTextChange
+            // 
+            this.ckbTextChange.AutoSize = true;
+            this.ckbTextChange.Checked = true;
+            this.ckbTextChange.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ckbTextChange.Location = new System.Drawing.Point(11, 496);
+            this.ckbTextChange.Name = "ckbTextChange";
+            this.ckbTextChange.Size = new System.Drawing.Size(76, 16);
+            this.ckbTextChange.TabIndex = 950;
+            this.ckbTextChange.Text = "문자 변경";
+            this.ckbTextChange.UseVisualStyleBackColor = true;
+            this.ckbTextChange.CheckedChanged += new System.EventHandler(this.ckbTextChange_CheckedChanged);
+            // 
             // ChangeName
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(560, 643);
+            this.ClientSize = new System.Drawing.Size(560, 742);
+            this.Controls.Add(this.ckbTextChange);
             this.Controls.Add(this.ckbPositionChangeLast);
             this.Controls.Add(this.ckbPositionChangeFirst);
             this.Controls.Add(this.gpbPositionChange);
@@ -622,6 +637,7 @@
         private System.Windows.Forms.RadioButton rdbPositionChangeLast;
         private System.Windows.Forms.CheckBox ckbPositionChangeFirst;
         private System.Windows.Forms.CheckBox ckbPositionChangeLast;
+        private System.Windows.Forms.CheckBox ckbTextChange;
     }
 }
 

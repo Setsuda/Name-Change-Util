@@ -194,7 +194,7 @@ namespace 간단한_이름_바꾸기
 
 
                     //  파일 이름 전부 바꿀 경우
-                    if (cbxBeforeText.Text != "")
+                    if (ckbTextChange.Checked == true && cbxBeforeText.Text != "")
                     {
                         if (cbxBeforeText.Text == "*.*")
                         {
@@ -556,6 +556,18 @@ namespace 간단한_이름_바꾸기
             cbxChangeExt.Enabled = ckbChangeExt.Checked;
         }
 
+        /// <summary>
+        /// 문자 변경 체크
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ckbTextChange_CheckedChanged(object sender, EventArgs e)
+        {
+            cbxBeforeText.Enabled = ckbTextChange.Checked;
+            cbxAfterText.Enabled = ckbTextChange.Checked;
+
+        }
+
 
         /// <summary>
         /// 콘피그 데이터 불러오기
@@ -632,9 +644,9 @@ namespace 간단한_이름_바꾸기
             //  구간 위치 변경 체크
             ckbPositionChange.Checked = ConfigData.isPositionChange;
             //  구간 위치 변경 위치 체크(머리)
-            rdbHead.Checked = !ConfigData.isPositionChangeBack;
+            rdbPositionChangeFirst.Checked = !ConfigData.isPositionChangeBack;
             //  구간 위치 변경 위치 체크(꼬리)
-            rdbTail.Checked = ConfigData.isPositionChangeBack;
+            rdbPositionChangeLast.Checked = ConfigData.isPositionChangeBack;
             //  구간 위치 변경 단어시작 이력
             AddComboxData(ConfigData.lstPositionChangeStart, cbxPositionChangeStart);
             //  구간 위치 변경 단어끝 이력
@@ -644,6 +656,8 @@ namespace 간단한_이름_바꾸기
             //  구간 위치 변경 꼬리말 한정 체크
             ckbPositionChangeLast.Checked = ConfigData.isPositionChangeLast;
 
+            //  구간 위치 변경 체크
+            ckbTextChange.Checked = ConfigData.isTextChange;
             //  변경전 문자 이력
             AddComboxData(ConfigData.lstBeforeText, cbxBeforeText);
             //  변경후 문자 이력
@@ -653,8 +667,8 @@ namespace 간단한_이름_바꾸기
         /// <summary>
         /// 콤보박스에 데이터 설정
         /// </summary>
-        /// <param name="list">데이터를 가져올 리스트</param>
-        /// <param name="comboBox">데이터를 설정할 콤보박스</param>
+        /// <param name="list">원본 리스트</param>
+        /// <param name="comboBox">복사 콤보박스</param>
         private void AddComboxData(List<string> list, ComboBox comboBox)
         {
             comboBox.Items.Clear();
@@ -730,10 +744,24 @@ namespace 간단한_이름_바꾸기
             //  카운트 꼬릿말 이력
             AddListData(con.lstCountTail, cbxCountTail);
 
-            //  꼬릿말 이력
-            AddListData(con.lstBeforeText, cbxBeforeText);
+            //  구간 위치 변경 체크
+            con.isPositionChange = ckbPositionChange.Checked;
+            //  구간 위치 변경 위치 체크
+            con.isPositionChangeBack = rdbPositionChangeLast.Checked;
+            //  구간 위치 변경 단어시작 이력
+            AddListData(con.lstPositionChangeStart, cbxPositionChangeStart);
+            //  구간 위치 변경 단어끝 이력
+            AddListData(con.lstPositionChangeEnd, cbxPositionChangeEnd);
+            //  구간 위치 변경 머리말 한정 체크
+            con.isPositionChangeFirst = ckbPositionChangeFirst.Checked;
+            //  구간 위치 변경 꼬리말 한정 체크
+            con.isPositionChangeLast = ckbPositionChangeLast.Checked;
 
-            //  꼬릿말 이력
+            //  구간 위치 변경 체크
+            con.isTextChange = ckbTextChange.Checked;
+            //  변경 전 문자 이력
+            AddListData(con.lstBeforeText, cbxBeforeText);
+            //  변경 후 문자 이력
             AddListData(con.lstAfterText, cbxAfterText);
 
             ConfigData = con;
@@ -956,6 +984,7 @@ namespace 간단한_이름_바꾸기
             rtn = startIndex < 0 ? filename.IndexOf(positionChangeStr) : filename.IndexOf(positionChangeStr, startIndex);
             return rtn;
         }
+
 
     }
 }
