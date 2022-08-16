@@ -54,8 +54,8 @@ namespace 간단한_이름_바꾸기
                 changedFileName = "";
             }
         }
-        private List<OriFileNameToChanged> changedFiles = new List<OriFileNameToChanged>();
-        private List<OriFileNameToChanged> changedFailedFiles = new List<OriFileNameToChanged>();
+        private List<OriFileNameToChanged> ChangedFiles { get; set; } = new List<OriFileNameToChanged>();
+        private List<OriFileNameToChanged> ChangedFailedFiles { get; set; } = new List<OriFileNameToChanged>();
 
         BeingProcessed bp = new BeingProcessed();
 
@@ -141,7 +141,7 @@ namespace 간단한_이름_바꾸기
             if (ckbSubfolders.Checked) searchOption = SearchOption.AllDirectories;
 
             //  두번째 이후 변경시 복원 이름 초기화
-            if( changedFiles != null) changedFiles.Clear();
+            if( ChangedFiles != null) ChangedFiles.Clear();
             bp = null;
             bp = new BeingProcessed();
 
@@ -335,13 +335,13 @@ namespace 간단한_이름_바꾸기
                         {
                             File.Move(files[i], changeFileName);
                             OriFileNameToChanged ofc = new OriFileNameToChanged(files[i], changeFileName);
-                            changedFiles.Add(ofc);
+                            ChangedFiles.Add(ofc);
                             count++;
                         }
                         catch (Exception ex)
                         {
                             OriFileNameToChanged ofc = new OriFileNameToChanged(files[i], changeFileName);
-                            changedFailedFiles.Add(ofc);
+                            ChangedFailedFiles.Add(ofc);
                             failedCount++;
 #if DEBUG
                             MessageBox.Show(ex.ToString());
@@ -368,7 +368,7 @@ namespace 간단한_이름_바꾸기
                 //  캔슬 시
                 else
                 {
-                    ReChangeFileName(changedFiles.Count, changedFiles.Count);
+                    ReChangeFileName(ChangedFiles.Count, ChangedFiles.Count);
                     if (MessageBox.Show("변경을 취소 하였습니다.") == DialogResult.OK)
                     {
                         isCancel = false;
@@ -383,7 +383,7 @@ namespace 간단한_이름_바꾸기
             catch (Exception ee)
             {
                 //  파일 이름 변경 복원
-                ReChangeFileName(changedFiles.Count, changedFiles.Count);
+                ReChangeFileName(ChangedFiles.Count, ChangedFiles.Count);
                 if (MessageBox.Show("이름 변경에 실패 했습니다.") == DialogResult.OK)
                 {
 
@@ -413,7 +413,7 @@ namespace 간단한_이름_바꾸기
 
             for (int i = 0; i < changedFilesCount; i++)
             {
-                OriFileNameToChanged otc = changedFiles[changedFilesCount - i - 1];
+                OriFileNameToChanged otc = ChangedFiles[changedFilesCount - i - 1];
                 bp.SetCurrentFileName(otc.oriFileName);
                 bp.SetCurrentFileCount((changedFilesCount - i).ToString() + "/" + length.ToString());
 
@@ -431,7 +431,7 @@ namespace 간단한_이름_바꾸기
         /// </summary>
         public void ReChangeFileName()
         {
-            ReChangeFileName(changedFiles.Count, changedFiles.Count);
+            ReChangeFileName(ChangedFiles.Count, ChangedFiles.Count);
             if (MessageBox.Show("이름을 복원 했습니다.") == DialogResult.OK)
             {
                 bp.Close();
@@ -774,16 +774,16 @@ namespace 간단한_이름_바꾸기
         /// <param name="comboBox">추가할 콤보박스데이터</param>
         private void AddListData(List<String> list, ComboBox comboBox)
         {
-            bool isAdd = true;
+            string currentText = comboBox.Text;
             for (int i = 0; i < comboBox.Items.Count; i++)
             {
-                if (comboBox.Text == (string)comboBox.Items[i])
+                if (currentText == (string)comboBox.Items[i])
                 {
-                    isAdd = false;
+                    comboBox.Items.Remove(currentText);
                     break;
                 }
             }
-            if (isAdd) comboBox.Items.Insert(0, comboBox.Text);
+            comboBox.Items.Insert(0, currentText);
 
             for (int i = 0; i < comboBox.Items.Count; i++)
             {
@@ -798,16 +798,15 @@ namespace 간단한_이름_바꾸기
         /// <param name="comboBox"></param>
         private void AddListString(List<String> list, ComboBox comboBox, string text)
         {
-            bool isAdd = true;
             for (int i = 0; i < comboBox.Items.Count; i++)
             {
                 if (text == (string)comboBox.Items[i])
                 {
-                    isAdd = false;
+                    comboBox.Items.Remove(text);
                     break;
                 }
             }
-            if (isAdd) comboBox.Items.Insert(0, text);
+            comboBox.Items.Insert(0, text);
 
             for (int i = 0; i < comboBox.Items.Count; i++)
             {
