@@ -784,7 +784,7 @@ namespace 간단한_이름_바꾸기
                 }
             }
             comboBox.Items.Insert(0, currentText);
-
+            comboBox.Text = currentText;
             for (int i = 0; i < comboBox.Items.Count; i++)
             {
                 list.Add((string)comboBox.Items[i]);
@@ -807,6 +807,7 @@ namespace 간단한_이름_바꾸기
                 }
             }
             comboBox.Items.Insert(0, text);
+            comboBox.Text = text;
 
             for (int i = 0; i < comboBox.Items.Count; i++)
             {
