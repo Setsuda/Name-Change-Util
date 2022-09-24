@@ -13,6 +13,7 @@ namespace 간단한_이름_바꾸기
 
     public partial class ChangeName : Form
     {
+        public Log.ILog Log = new Log.Log();
         public static ChangeName instance;
 
         //  설정 파일 이름
@@ -69,7 +70,7 @@ namespace 간단한_이름_바꾸기
 
             //  configData 불러오기
             ConfigDataLoad();
-
+            
             //  인스턴스 설정
             instance = this;
         }
@@ -335,6 +336,7 @@ namespace 간단한_이름_바꾸기
                         {
                             File.Move(files[i], changeFileName);
                             OriFileNameToChanged ofc = new OriFileNameToChanged(files[i], changeFileName);
+                            Log.Line($"[{files[i]}]을 [{changeFileName}]로 변경 했습니다.");
                             ChangedFiles.Add(ofc);
                             count++;
                         }
@@ -343,6 +345,7 @@ namespace 간단한_이름_바꾸기
                             OriFileNameToChanged ofc = new OriFileNameToChanged(files[i], changeFileName);
                             ChangedFailedFiles.Add(ofc);
                             failedCount++;
+                            Log.Error(ex);
 #if DEBUG
                             MessageBox.Show(ex.ToString());
 #endif
@@ -386,10 +389,10 @@ namespace 간단한_이름_바꾸기
                 ReChangeFileName(ChangedFiles.Count, ChangedFiles.Count);
                 if (MessageBox.Show("이름 변경에 실패 했습니다.") == DialogResult.OK)
                 {
-
                     bp.Close();
                     //this.Enabled = true;
                 }
+                Log.Error(ee);
 #if DEBUG
                 MessageBox.Show(ee.ToString());
 #endif
