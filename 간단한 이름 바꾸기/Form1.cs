@@ -149,7 +149,7 @@ namespace 간단한_이름_바꾸기
             //  이름 변경
             try
             {
-
+                Log.Info("[Start]\t이름변경");
                 //  변경 갯수
                 int count = 0;
                 int failedCount = 0;
@@ -336,7 +336,7 @@ namespace 간단한_이름_바꾸기
                         {
                             File.Move(files[i], changeFileName);
                             OriFileNameToChanged ofc = new OriFileNameToChanged(files[i], changeFileName);
-                            Log.Line($"[{files[i]}]을 [{changeFileName}]로 변경 했습니다.");
+                            Log.Line($"{files[i]}\t→\t{changeFileName}");
                             ChangedFiles.Add(ofc);
                             count++;
                         }
@@ -359,8 +359,10 @@ namespace 간단한_이름_바꾸기
                 //  실행 시
                 if (!isCancel)
                 {
-                    if (MessageBox.Show($"총 {count}개의 이름을 변경 하였습니다."
-                        + $"총 {failedCount}개의 이름을 변경에 실패 하였습니다.") == DialogResult.OK)
+                    string msg = $"총 {count}개의 이름을 변경 하였습니다.";
+                    if(failedCount>0) msg +=$"총 {failedCount}개의 이름을 변경에 실패 하였습니다.";
+                    Log.Info(msg);
+                    if (MessageBox.Show(msg) == DialogResult.OK)
                     {
                         //bp.Close();
                         //this.Enabled = true;
@@ -372,7 +374,9 @@ namespace 간단한_이름_바꾸기
                 else
                 {
                     ReChangeFileName(ChangedFiles.Count, ChangedFiles.Count);
-                    if (MessageBox.Show("변경을 취소 하였습니다.") == DialogResult.OK)
+                    string msg = "변경을 취소 하였습니다.";
+                    Log.Info(msg);
+                    if (MessageBox.Show(msg) == DialogResult.OK)
                     {
                         isCancel = false;
                         bp.Close();
@@ -387,7 +391,9 @@ namespace 간단한_이름_바꾸기
             {
                 //  파일 이름 변경 복원
                 ReChangeFileName(ChangedFiles.Count, ChangedFiles.Count);
-                if (MessageBox.Show("이름 변경에 실패 했습니다.") == DialogResult.OK)
+                string msg = "이름 변경에 실패 했습니다.";
+                Log.Info(msg);
+                if (MessageBox.Show(msg) == DialogResult.OK)
                 {
                     bp.Close();
                     //this.Enabled = true;
@@ -396,12 +402,11 @@ namespace 간단한_이름_바꾸기
 #if DEBUG
                 MessageBox.Show(ee.ToString());
 #endif
-
-
-
-
-
             }
+
+
+            Log.Info("[End]\t이름변경");
+
 
         }
 
@@ -435,7 +440,9 @@ namespace 간단한_이름_바꾸기
         public void ReChangeFileName()
         {
             ReChangeFileName(ChangedFiles.Count, ChangedFiles.Count);
-            if (MessageBox.Show("이름을 복원 했습니다.") == DialogResult.OK)
+            string msg = "이름을 복원 했습니다.";
+            Log.Info(msg);
+            if (MessageBox.Show(msg) == DialogResult.OK)
             {
                 bp.Close();
             }
@@ -926,10 +933,11 @@ namespace 간단한_이름_바꾸기
         {
             string rtn = "";
 
-            string fileName = Path.GetFileName(fullPath);
-            
-            //  파일명
-            rtn = isExt ? fileName : fileName.Substring(0, fileName.LastIndexOf("."));
+            rtn = Path.GetFileName(fullPath);
+
+            if (!isExt) rtn = Path.GetFileNameWithoutExtension(fullPath);
+
+            //rtn = isExt ? fileName : fileName.Substring(0, fileName.LastIndexOf("."));
 
             return rtn;
         }
@@ -944,10 +952,13 @@ namespace 간단한_이름_바꾸기
         {
             string rtn = "";
 
-            string fileName = Path.GetFileName(fullPath);
+            //string fileName = Path.GetFileName(fullPath);
+            string extension = Path.GetExtension(fullPath);
+            if(!string.IsNullOrEmpty(extension)) {
+                //  확장자
+                rtn = isAddDot ? extension : extension.Substring(1);
 
-            //  확장자
-            rtn = isAddDot ? fileName.Substring(fileName.LastIndexOf(".")) : fileName.Substring(fileName.LastIndexOf(".") + 1);
+            }
 
 
             return rtn;
