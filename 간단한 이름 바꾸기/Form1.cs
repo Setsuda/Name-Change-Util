@@ -7,6 +7,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
 using 간단한_이름_바꾸기.Models;
+using 간단한_이름_바꾸기.Logic;
 
 namespace 간단한_이름_바꾸기
 {
@@ -38,21 +39,27 @@ namespace 간단한_이름_바꾸기
         //  캔슬 플러그
         private static bool isCancel = false;
 
+        //로직
+        public Form1Logic Logic { get; set; } = new Form1Logic();
+
         //  캔슬대비 이름 격납고
         public class OriFileNameToChanged
         {
             public string oriFileName;
             public string changedFileName;
+            public bool isFolder;
 
-            public OriFileNameToChanged(string oriFileName, string changedFileName)
+            public OriFileNameToChanged(string oriFileName, string changedFileName, bool isFolder)
             {
                 this.oriFileName = oriFileName;
                 this.changedFileName = changedFileName;
+                this.isFolder = isFolder;
             }
             public OriFileNameToChanged()
             {
                 oriFileName = "";
                 changedFileName = "";
+                isFolder = false;
             }
         }
         private List<OriFileNameToChanged> ChangedFiles { get; set; } = new List<OriFileNameToChanged>();
@@ -82,28 +89,7 @@ namespace 간단한_이름_바꾸기
         /// <param name="e"></param>
         private void btnFolder_Click(object sender, EventArgs e)
         {
-
-
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
-
-            fbd.Description = "폴더를 선택해 주세요.";
-
-            fbd.RootFolder = Environment.SpecialFolder.MyComputer;
-
-            try
-            {
-                if (cbxFolder.Text != "") fbd.SelectedPath = cbxFolder.Text;
-            }
-            catch (Exception)
-            {
-
-            }
-
-            if (fbd.ShowDialog(this) == DialogResult.OK)
-            {
-                cbxFolder.Text = fbd.SelectedPath;
-            }
-
+            cbxFolder.Text = Logic.FolderSelect(this, sender, e, cbxFolder.Text);
         }
 
         /// <summary>
@@ -154,213 +140,56 @@ namespace 간단한_이름_바꾸기
                 int count = 0;
                 int failedCount = 0;
 
-                string[] files;
+                IList<string> files = new List<string>();
+                IList<string> folders = new List<string>();
                 //  파일이름
                 //  적용 확장자가 하나일 경우
-                if (txtFileExt.Text.IndexOf(";") < 0)
+                if(ckbIsFileNameChange.Checked)
                 {
-                    files = Directory.GetFiles(cbxFolder.Text, txtFileExt.Text, searchOption);
+                    if (txtFileExt.Text.IndexOf(";") < 0)
+                    {
+                        files = Directory.GetFiles(cbxFolder.Text, txtFileExt.Text, searchOption);
+                    }
+                    //  적용 확장자가 2 이상일 경우
+                    else
+                    {
+                        var exts = txtFileExt.Text.Split(';');
+                        files = exts.SelectMany(ext => Directory.GetFiles(cbxFolder.Text, ext, searchOption)).ToArray();
+                    }
 
                 }
-                //  적용 확장자가 2 이상일 경우
-                else
+
+                if ( ckbIsFolderNameChange.Checked)
                 {
-                    var exts = txtFileExt.Text.Split(';');
-                    files = exts.SelectMany(ext => Directory.GetFiles(cbxFolder.Text, ext, searchOption)).ToArray();
+                    folders = Directory.GetDirectories(cbxFolder.Text, "*", searchOption);
                 }
 
+                int maxCount = files.Count + folders.Count;
                 //  처리 윈도우 설정
                 bp.Show();
-                bp.SetMaxCount(files.Length);
+                bp.SetMaxCount(maxCount);
                 bp.SetValue(0);
                 bp.SetCurrentFileCount("");
                 bp.SetCurrentFileName("");
+                bp.IsFolder = false;
 
-                //  이름별 처리
-                for (int i = 0; i < files.Length; i++)
+                //  파일 이름별 처리
+                if(ckbIsFileNameChange.Checked) NameChangeProc(ref count, ref failedCount, files, false);
+
+                if(ckbIsFolderNameChange.Checked)
                 {
-                    //  파일명
-                    string fileName = GetFileName(files[i], false).Trim();
-                    //  확장자
-                    string ext = GetExt(files[i], true);
-                    //  경로
-                    string path = GetPath(files[i], true);
-
-                    //  처리 윈도우 표시
-                    bp.SetCurrentFileName(path + fileName);
-                    bp.SetCurrentFileCount(i.ToString() + "/" + files.Length.ToString());
-
-                    //  확장자 변경
-                    if (ckbChangeExt.Checked) ext = cbxChangeExt.Text.IndexOf(".") == 0 ? cbxChangeExt.Text : "." + cbxChangeExt.Text;
-
-
-                    //  파일 이름 전부 바꿀 경우
-                    if (ckbTextChange.Checked == true && cbxBeforeText.Text != "")
-                    {
-                        if (cbxBeforeText.Text == "*.*")
-                        {
-                            fileName = cbxAfterText.Text;
-                        }
-                        else
-                        {
-                            fileName = fileName.Replace(cbxBeforeText.Text, cbxAfterText.Text);
-                        }
-                    }
-
-                    //구간 위치 변경
-                    if (ckbPositionChange.Checked)
-                    {
-                        int positionChangeStartIndex = -1;
-                        int positionChangeEndIndex = -1;
-                        int positionChangeLength = -1;
-                        if (string.IsNullOrEmpty(cbxPositionChangeStart.Text) != true
-                            && string.IsNullOrEmpty(cbxPositionChangeEnd.Text) != true)
-                        {
-                            positionChangeStartIndex = GetPostionChangeIndex(fileName, cbxPositionChangeStart.Text);
-                            positionChangeEndIndex = GetPostionChangeIndex(fileName, cbxPositionChangeEnd.Text, positionChangeStartIndex);
-                            positionChangeEndIndex = cbxPositionChangeEnd.Text.Length == 1 ? positionChangeEndIndex : positionChangeEndIndex + cbxPositionChangeEnd.Text.Length - 1;
-                            if (positionChangeStartIndex < 0 || positionChangeEndIndex < 0) positionChangeLength = 0;
-                            else positionChangeLength = positionChangeEndIndex - positionChangeStartIndex + 1;
-                        }
-                        else if (string.IsNullOrEmpty(cbxPositionChangeStart.Text) != true)
-                        {
-                            positionChangeStartIndex = GetPostionChangeIndex(fileName, cbxPositionChangeStart.Text);
-                            positionChangeEndIndex = positionChangeStartIndex + cbxPositionChangeStart.Text.Length - 1;
-                            if (positionChangeStartIndex < 0 || positionChangeEndIndex < 0) positionChangeLength = 0;
-                            else positionChangeLength = cbxPositionChangeStart.Text.Length;
-
-                        }
-                        else if (string.IsNullOrEmpty(cbxPositionChangeEnd.Text) != true)
-                        {
-                            positionChangeStartIndex = GetPostionChangeIndex(fileName, cbxPositionChangeEnd.Text);
-                            positionChangeEndIndex = positionChangeStartIndex + cbxPositionChangeEnd.Text.Length - 1;
-                            if (positionChangeStartIndex < 0 || positionChangeEndIndex < 0) positionChangeLength = 0;
-                            else positionChangeLength = cbxPositionChangeEnd.Text.Length;
-
-                        }
-
-                        bool positionChangeUse = true;
-                        if (ckbPositionChangeFirst.Checked == true && positionChangeStartIndex != 0) positionChangeUse = false;
-                        if (ckbPositionChangeLast.Checked == true && positionChangeEndIndex != fileName.Length - 1) positionChangeUse = false;
-
-                        if (positionChangeUse == true && positionChangeStartIndex >= 0 && positionChangeLength > 0) 
-                        {
-                            string positionChangeStr = fileName.Substring(positionChangeStartIndex, positionChangeLength);
-
-                            string tempFileName = fileName.Substring(0, positionChangeStartIndex);
-                            if (fileName.Length > positionChangeEndIndex) tempFileName += fileName.Substring(positionChangeEndIndex + 1);
-                            fileName = tempFileName.Trim();
-
-
-
-                            if (rdbPositionChangeFirst.Checked == true)
-                            {
-                                fileName = positionChangeStr + fileName;
-                            }
-                            else
-                            {
-                                fileName = fileName + positionChangeStr;
-                            }
-
-                        }
-                    }
-
-                    //  머릿말
-                    if (ckbHead.Checked) fileName = cbxHead.Text + fileName;
-
-                    //  꼬릿말
-                    if (ckbTail.Checked)
-                    {
-                        fileName += cbxTail.Text;
-                    }
-
-                    //  카운트
-                    if (ckbCount.Checked)
-                    {
-                        StringBuilder sb = new StringBuilder();
-
-                        //  제일 앞부분에 추가
-                        if (rdbHead.Checked)
-                        {
-                            sb.Append(cbxCountHead.Text);
-
-                            //  카운트
-                            StringBuilder num = new StringBuilder();
-                            num.Append((i + 1).ToString());
-                            int number = int.Parse(cbxCountNumber.Text) - num.Length;
-                            if (number > 0)
-                            {
-                                for (int j = 0; j < number; j++)
-                                {
-                                    num.Insert(0, "0");
-                                }
-                            }
-                            sb.Append(num.ToString());
-                            sb.Append(cbxCountTail.Text);
-                            sb.Append(fileName);
-
-                        }
-                        //  제일 뒷부분에 추가
-                        else
-                        {
-                            sb.Append(fileName);
-                            sb.Append(cbxCountHead.Text);
-
-                            //  카운트
-                            StringBuilder num = new StringBuilder();
-                            num.Append((i + 1).ToString());
-                            int number = int.Parse(cbxCountNumber.Text) - num.Length;
-                            if (number > 0)
-                            {
-                                for (int j = 0; j < number; j++)
-                                {
-                                    num.Insert(0, "0");
-                                }
-                            }
-                            sb.Append(num.ToString());
-
-                            sb.Append(cbxCountTail.Text);
-                        }
-
-                        fileName = sb.ToString();
-
-                    }
-
-                    //  이름 변환
-                    string changeFileName = path + fileName + ext;
-                    if (files[i] != changeFileName)
-                    {
-
-                        changeFileName = SameNameToCountName(changeFileName);
-                        try
-                        {
-                            File.Move(files[i], changeFileName);
-                            OriFileNameToChanged ofc = new OriFileNameToChanged(files[i], changeFileName);
-                            Log.Line($"{files[i]}\t→\t{changeFileName}");
-                            ChangedFiles.Add(ofc);
-                            count++;
-                        }
-                        catch (Exception ex)
-                        {
-                            OriFileNameToChanged ofc = new OriFileNameToChanged(files[i], changeFileName);
-                            ChangedFailedFiles.Add(ofc);
-                            failedCount++;
-                            Log.Error(ex);
-#if DEBUG
-                            MessageBox.Show(ex.ToString());
-#endif
-                        }
-                    }
-
-                    bp.SetValue(i + 1);
-
+                    bp.IsFolder = true;
+                    
+                    
+                    //  폴더 이름별 처리
+                    NameChangeProc(ref count, ref failedCount, folders, true);
                 }
 
                 //  실행 시
                 if (!isCancel)
                 {
                     string msg = $"총 {count}개의 이름을 변경 하였습니다.";
-                    if(failedCount>0) msg +=$"총 {failedCount}개의 이름을 변경에 실패 하였습니다.";
+                    if (failedCount > 0) msg += $"총 {failedCount}개의 이름을 변경에 실패 하였습니다.";
                     Log.Info(msg);
                     if (MessageBox.Show(msg) == DialogResult.OK)
                     {
@@ -410,6 +239,193 @@ namespace 간단한_이름_바꾸기
 
         }
 
+        private void NameChangeProc(ref int count, ref int failedCount, IList<string> files, bool isFolder)
+        {
+            if (isFolder) files = Logic.ListSortChange(files);
+            int minCount = bp.GetValue();
+            for (int i = 0; i < files.Count; i++)
+            {
+                //  파일명
+                string fileName = GetFileName(files[i], false).Trim();
+                //  확장자
+                string ext = "";
+                if (!isFolder) ext = GetExt(files[i], true);
+
+                //  경로
+                string path = GetPath(files[i], true);
+
+                //  처리 윈도우 표시
+                bp.SetCurrentFileName(path + fileName);
+                bp.SetCurrentFileCount((minCount + i + 1).ToString() + "/" + bp.GetMaxCount().ToString());
+
+                //  확장자 변경
+                if (!isFolder) if (ckbChangeExt.Checked) ext = cbxChangeExt.Text.IndexOf(".") == 0 ? cbxChangeExt.Text : "." + cbxChangeExt.Text;
+
+
+                //  파일 이름 전부 바꿀 경우
+                if (ckbTextChange.Checked == true && cbxBeforeText.Text != "")
+                {
+                    if (cbxBeforeText.Text == "*.*")
+                    {
+                        fileName = cbxAfterText.Text;
+                    }
+                    else
+                    {
+                        fileName = fileName.Replace(cbxBeforeText.Text, cbxAfterText.Text);
+                    }
+                }
+
+                //구간 위치 변경
+                if (ckbPositionChange.Checked)
+                {
+                    int positionChangeStartIndex = -1;
+                    int positionChangeEndIndex = -1;
+                    int positionChangeLength = -1;
+                    if (string.IsNullOrEmpty(cbxPositionChangeStart.Text) != true
+                        && string.IsNullOrEmpty(cbxPositionChangeEnd.Text) != true)
+                    {
+                        positionChangeStartIndex = GetPostionChangeIndex(fileName, cbxPositionChangeStart.Text);
+                        positionChangeEndIndex = GetPostionChangeIndex(fileName, cbxPositionChangeEnd.Text, positionChangeStartIndex);
+                        positionChangeEndIndex = cbxPositionChangeEnd.Text.Length == 1 ? positionChangeEndIndex : positionChangeEndIndex + cbxPositionChangeEnd.Text.Length - 1;
+                        if (positionChangeStartIndex < 0 || positionChangeEndIndex < 0) positionChangeLength = 0;
+                        else positionChangeLength = positionChangeEndIndex - positionChangeStartIndex + 1;
+                    }
+                    else if (string.IsNullOrEmpty(cbxPositionChangeStart.Text) != true)
+                    {
+                        positionChangeStartIndex = GetPostionChangeIndex(fileName, cbxPositionChangeStart.Text);
+                        positionChangeEndIndex = positionChangeStartIndex + cbxPositionChangeStart.Text.Length - 1;
+                        if (positionChangeStartIndex < 0 || positionChangeEndIndex < 0) positionChangeLength = 0;
+                        else positionChangeLength = cbxPositionChangeStart.Text.Length;
+
+                    }
+                    else if (string.IsNullOrEmpty(cbxPositionChangeEnd.Text) != true)
+                    {
+                        positionChangeStartIndex = GetPostionChangeIndex(fileName, cbxPositionChangeEnd.Text);
+                        positionChangeEndIndex = positionChangeStartIndex + cbxPositionChangeEnd.Text.Length - 1;
+                        if (positionChangeStartIndex < 0 || positionChangeEndIndex < 0) positionChangeLength = 0;
+                        else positionChangeLength = cbxPositionChangeEnd.Text.Length;
+
+                    }
+
+                    bool positionChangeUse = true;
+                    if (ckbPositionChangeFirst.Checked == true && positionChangeStartIndex != 0) positionChangeUse = false;
+                    if (ckbPositionChangeLast.Checked == true && positionChangeEndIndex != fileName.Length - 1) positionChangeUse = false;
+
+                    if (positionChangeUse == true && positionChangeStartIndex >= 0 && positionChangeLength > 0)
+                    {
+                        string positionChangeStr = fileName.Substring(positionChangeStartIndex, positionChangeLength);
+
+                        string tempFileName = fileName.Substring(0, positionChangeStartIndex);
+                        if (fileName.Length > positionChangeEndIndex) tempFileName += fileName.Substring(positionChangeEndIndex + 1);
+                        fileName = tempFileName.Trim();
+
+
+
+                        if (rdbPositionChangeFirst.Checked == true)
+                        {
+                            fileName = positionChangeStr + fileName;
+                        }
+                        else
+                        {
+                            fileName = fileName + positionChangeStr;
+                        }
+
+                    }
+                }
+
+                //  머릿말
+                if (ckbHead.Checked) fileName = cbxHead.Text + fileName;
+
+                //  꼬릿말
+                if (ckbTail.Checked)
+                {
+                    fileName += cbxTail.Text;
+                }
+
+                //  카운트
+                if (ckbCount.Checked)
+                {
+                    StringBuilder sb = new StringBuilder();
+
+                    //  제일 앞부분에 추가
+                    if (rdbHead.Checked)
+                    {
+                        sb.Append(cbxCountHead.Text);
+
+                        //  카운트
+                        StringBuilder num = new StringBuilder();
+                        num.Append((i + 1).ToString());
+                        int number = int.Parse(cbxCountNumber.Text) - num.Length;
+                        if (number > 0)
+                        {
+                            for (int j = 0; j < number; j++)
+                            {
+                                num.Insert(0, "0");
+                            }
+                        }
+                        sb.Append(num.ToString());
+                        sb.Append(cbxCountTail.Text);
+                        sb.Append(fileName);
+
+                    }
+                    //  제일 뒷부분에 추가
+                    else
+                    {
+                        sb.Append(fileName);
+                        sb.Append(cbxCountHead.Text);
+
+                        //  카운트
+                        StringBuilder num = new StringBuilder();
+                        num.Append((i + 1).ToString());
+                        int number = int.Parse(cbxCountNumber.Text) - num.Length;
+                        if (number > 0)
+                        {
+                            for (int j = 0; j < number; j++)
+                            {
+                                num.Insert(0, "0");
+                            }
+                        }
+                        sb.Append(num.ToString());
+
+                        sb.Append(cbxCountTail.Text);
+                    }
+
+                    fileName = sb.ToString();
+
+                }
+
+                //  이름 변환
+                string changeFileName = path + fileName + ext;
+                if (files[i] != changeFileName)
+                {
+
+                    changeFileName = SameNameToCountName(changeFileName, isFolder);
+                    try
+                    {
+                        if (!isFolder) File.Move(files[i], changeFileName);
+                        else Directory.Move(files[i], changeFileName);
+                        OriFileNameToChanged ofc = new OriFileNameToChanged(files[i], changeFileName, isFolder);
+                        Log.Line($"{files[i]}\t→\t{changeFileName}");
+                        ChangedFiles.Insert(0,ofc);
+                        count++;
+                    }
+                    catch (Exception ex)
+                    {
+                        OriFileNameToChanged ofc = new OriFileNameToChanged(files[i], changeFileName, isFolder);
+                        ChangedFailedFiles.Insert(0,ofc);
+                        failedCount++;
+                        Log.Error(ex);
+#if DEBUG
+                            MessageBox.Show(ex.ToString());
+#endif
+                    }
+                }
+
+                bp.SetValue(minCount + i + 1);
+
+            }
+        }
+
 
         /// <summary>
         /// 변경된 이름 복원
@@ -421,11 +437,12 @@ namespace 간단한_이름_바꾸기
 
             for (int i = 0; i < changedFilesCount; i++)
             {
-                OriFileNameToChanged otc = ChangedFiles[changedFilesCount - i - 1];
+                OriFileNameToChanged otc = ChangedFiles[i];
                 bp.SetCurrentFileName(otc.oriFileName);
                 bp.SetCurrentFileCount((changedFilesCount - i).ToString() + "/" + length.ToString());
 
-                File.Move(otc.changedFileName, otc.oriFileName);
+                if(!otc.isFolder) File.Move(otc.changedFileName, otc.oriFileName);
+                else Directory.Move(otc.changedFileName, otc.oriFileName);
 
                 bp.SetValue(changedFilesCount - (i + 1));
             }
@@ -580,7 +597,7 @@ namespace 간단한_이름_바꾸기
 
 
         /// <summary>
-        /// 콘피그 데이터 불러오기
+        /// 설정 데이터 불러오기
         /// </summary>
         /// <returns></returns>
         private bool ConfigDataLoad()
@@ -607,7 +624,7 @@ namespace 간단한_이름_바꾸기
 
 
         /// <summary>
-        /// 콘피그 데이터 취득
+        /// 설정 데이터 취득
         /// </summary>
         private void GetConfigData()
         {
@@ -627,6 +644,11 @@ namespace 간단한_이름_바꾸기
             ckbChangeExt.Checked = ConfigData.isChangeExt;
             //  확장자 변경 이력 
             AddComboxData(ConfigData.lstChangeExt, cbxChangeExt);
+
+            //  폴더명 변경 체크
+            ckbIsFileNameChange.Checked = ConfigData.isFileNameChange;
+            //  폴더명 변경 체크
+            ckbIsFolderNameChange.Checked = ConfigData.isFolderNameChange;
 
             //  머릿말 달기 체크
             ckbHead.Checked = ConfigData.isHead;
@@ -730,6 +752,11 @@ namespace 간단한_이름_바꾸기
             con.isChangeExt = ckbChangeExt.Checked;
             //  확장자 변경 이력 
             AddListData(con.lstChangeExt, cbxChangeExt);
+
+            //  파일명 변경 체크
+            con.isFileNameChange = ckbIsFileNameChange.Checked;
+            //  폴더명 변경 체크
+            con.isFolderNameChange = ckbIsFolderNameChange.Checked;
 
             //  머릿말 달기 체크
             con.isHead = ckbHead.Checked;
@@ -897,10 +924,10 @@ namespace 간단한_이름_바꾸기
         /// </summary>
         /// <param name="fullPath"></param>
         /// <returns></returns>
-        private string SameNameToCountName(string fullPath)
+        private string SameNameToCountName(string fullPath, bool isFolder)
         {
             string rtn = fullPath;
-            if( File.Exists(fullPath) == true)
+            if (Logic.IsExists(fullPath, isFolder) == true)
             {
                 int i = 0;
                 string filename = GetFileName(fullPath, false);
@@ -912,7 +939,7 @@ namespace 간단한_이름_바꾸기
                     i++;
                     string tempFilename = filename + $" ({i})";
                     nextFilename = path + tempFilename + ext;
-                    if (File.Exists(nextFilename) == false) break;
+                    if (Logic.IsExists(nextFilename, isFolder) == false) break;
                 }
                 rtn = nextFilename;
             }
@@ -999,6 +1026,20 @@ namespace 간단한_이름_바꾸기
             return rtn;
         }
 
+        private void btnSearchFolder_Click(object sender, EventArgs e)
+        {
+            cbxSearchFolder.Text = Logic.FolderSelect(this, sender, e, cbxSearchFolder.Text);
 
+        }
+
+        private void btnPassDelete_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnFileDelete_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

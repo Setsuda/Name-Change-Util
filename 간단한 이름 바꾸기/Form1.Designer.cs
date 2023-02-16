@@ -70,8 +70,37 @@
             this.ckbPositionChangeFirst = new System.Windows.Forms.CheckBox();
             this.ckbPositionChangeLast = new System.Windows.Forms.CheckBox();
             this.ckbTextChange = new System.Windows.Forms.CheckBox();
+            this.pnlSearch = new System.Windows.Forms.Panel();
+            this.lblSearchTarget = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.ckbSearchTargetFullPass = new System.Windows.Forms.CheckBox();
+            this.ckbSearchTargetPass = new System.Windows.Forms.CheckBox();
+            this.ckbSearchTargetName = new System.Windows.Forms.CheckBox();
+            this.btnFileDelete = new System.Windows.Forms.Button();
+            this.btnPassDelete = new System.Windows.Forms.Button();
+            this.ckbSpaceIgnore = new System.Windows.Forms.CheckBox();
+            this.ckbPerfectSame = new System.Windows.Forms.CheckBox();
+            this.dgvFileList = new System.Windows.Forms.DataGridView();
+            this.FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Pass = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FullPass = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FileSelected = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.cbxSearchText = new System.Windows.Forms.ComboBox();
+            this.lblSearchText = new System.Windows.Forms.Label();
+            this.ckbSearchSubfolders = new System.Windows.Forms.CheckBox();
+            this.cbxSearchFileExt = new System.Windows.Forms.ComboBox();
+            this.cbxSearchFolder = new System.Windows.Forms.ComboBox();
+            this.lblSearchFileExt = new System.Windows.Forms.Label();
+            this.btnSearchFolder = new System.Windows.Forms.Button();
+            this.txtSearchFileExt = new System.Windows.Forms.TextBox();
+            this.lblSearchPanal = new System.Windows.Forms.Label();
+            this.ckbIsFolderNameChange = new System.Windows.Forms.CheckBox();
+            this.ckbIsFileNameChange = new System.Windows.Forms.CheckBox();
             this.gpbCount.SuspendLayout();
             this.gpbPositionChange.SuspendLayout();
+            this.pnlSearch.SuspendLayout();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvFileList)).BeginInit();
             this.SuspendLayout();
             // 
             // btnFolder
@@ -542,11 +571,295 @@
             this.ckbTextChange.UseVisualStyleBackColor = true;
             this.ckbTextChange.CheckedChanged += new System.EventHandler(this.ckbTextChange_CheckedChanged);
             // 
+            // pnlSearch
+            // 
+            this.pnlSearch.Controls.Add(this.lblSearchTarget);
+            this.pnlSearch.Controls.Add(this.panel1);
+            this.pnlSearch.Controls.Add(this.btnFileDelete);
+            this.pnlSearch.Controls.Add(this.btnPassDelete);
+            this.pnlSearch.Controls.Add(this.ckbSpaceIgnore);
+            this.pnlSearch.Controls.Add(this.ckbPerfectSame);
+            this.pnlSearch.Controls.Add(this.dgvFileList);
+            this.pnlSearch.Controls.Add(this.cbxSearchText);
+            this.pnlSearch.Controls.Add(this.lblSearchText);
+            this.pnlSearch.Controls.Add(this.ckbSearchSubfolders);
+            this.pnlSearch.Controls.Add(this.cbxSearchFileExt);
+            this.pnlSearch.Controls.Add(this.cbxSearchFolder);
+            this.pnlSearch.Controls.Add(this.lblSearchFileExt);
+            this.pnlSearch.Controls.Add(this.btnSearchFolder);
+            this.pnlSearch.Controls.Add(this.txtSearchFileExt);
+            this.pnlSearch.Controls.Add(this.lblSearchPanal);
+            this.pnlSearch.Location = new System.Drawing.Point(575, 13);
+            this.pnlSearch.Name = "pnlSearch";
+            this.pnlSearch.Size = new System.Drawing.Size(613, 717);
+            this.pnlSearch.TabIndex = 1031;
+            // 
+            // lblSearchTarget
+            // 
+            this.lblSearchTarget.AutoSize = true;
+            this.lblSearchTarget.Location = new System.Drawing.Point(344, 84);
+            this.lblSearchTarget.Name = "lblSearchTarget";
+            this.lblSearchTarget.Size = new System.Drawing.Size(29, 12);
+            this.lblSearchTarget.TabIndex = 3002;
+            this.lblSearchTarget.Text = "대상";
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.ckbSearchTargetFullPass);
+            this.panel1.Controls.Add(this.ckbSearchTargetPass);
+            this.panel1.Controls.Add(this.ckbSearchTargetName);
+            this.panel1.Location = new System.Drawing.Point(335, 99);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(189, 33);
+            this.panel1.TabIndex = 3001;
+            // 
+            // ckbSearchTargetFullPass
+            // 
+            this.ckbSearchTargetFullPass.AutoSize = true;
+            this.ckbSearchTargetFullPass.Location = new System.Drawing.Point(119, 13);
+            this.ckbSearchTargetFullPass.Name = "ckbSearchTargetFullPass";
+            this.ckbSearchTargetFullPass.Size = new System.Drawing.Size(60, 16);
+            this.ckbSearchTargetFullPass.TabIndex = 2660;
+            this.ckbSearchTargetFullPass.Text = "풀패스";
+            this.ckbSearchTargetFullPass.UseVisualStyleBackColor = true;
+            // 
+            // ckbSearchTargetPass
+            // 
+            this.ckbSearchTargetPass.AutoSize = true;
+            this.ckbSearchTargetPass.Location = new System.Drawing.Point(65, 13);
+            this.ckbSearchTargetPass.Name = "ckbSearchTargetPass";
+            this.ckbSearchTargetPass.Size = new System.Drawing.Size(48, 16);
+            this.ckbSearchTargetPass.TabIndex = 2640;
+            this.ckbSearchTargetPass.Text = "패스";
+            this.ckbSearchTargetPass.UseVisualStyleBackColor = true;
+            // 
+            // ckbSearchTargetName
+            // 
+            this.ckbSearchTargetName.AutoSize = true;
+            this.ckbSearchTargetName.Checked = true;
+            this.ckbSearchTargetName.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ckbSearchTargetName.Location = new System.Drawing.Point(11, 13);
+            this.ckbSearchTargetName.Name = "ckbSearchTargetName";
+            this.ckbSearchTargetName.Size = new System.Drawing.Size(48, 16);
+            this.ckbSearchTargetName.TabIndex = 2620;
+            this.ckbSearchTargetName.Text = "이름";
+            this.ckbSearchTargetName.UseVisualStyleBackColor = true;
+            // 
+            // btnFileDelete
+            // 
+            this.btnFileDelete.Location = new System.Drawing.Point(493, 172);
+            this.btnFileDelete.Name = "btnFileDelete";
+            this.btnFileDelete.Size = new System.Drawing.Size(101, 23);
+            this.btnFileDelete.TabIndex = 2800;
+            this.btnFileDelete.Text = "선택 파일 삭제";
+            this.btnFileDelete.UseVisualStyleBackColor = true;
+            this.btnFileDelete.Click += new System.EventHandler(this.btnFileDelete_Click);
+            // 
+            // btnPassDelete
+            // 
+            this.btnPassDelete.Location = new System.Drawing.Point(381, 172);
+            this.btnPassDelete.Name = "btnPassDelete";
+            this.btnPassDelete.Size = new System.Drawing.Size(106, 23);
+            this.btnPassDelete.TabIndex = 2900;
+            this.btnPassDelete.Text = "선택 폴더 삭제";
+            this.btnPassDelete.UseVisualStyleBackColor = true;
+            this.btnPassDelete.Click += new System.EventHandler(this.btnPassDelete_Click);
+            // 
+            // ckbSpaceIgnore
+            // 
+            this.ckbSpaceIgnore.AutoSize = true;
+            this.ckbSpaceIgnore.Checked = true;
+            this.ckbSpaceIgnore.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ckbSpaceIgnore.Location = new System.Drawing.Point(207, 116);
+            this.ckbSpaceIgnore.Name = "ckbSpaceIgnore";
+            this.ckbSpaceIgnore.Size = new System.Drawing.Size(72, 16);
+            this.ckbSpaceIgnore.TabIndex = 2600;
+            this.ckbSpaceIgnore.Text = "공백무시";
+            this.ckbSpaceIgnore.UseVisualStyleBackColor = true;
+            // 
+            // ckbPerfectSame
+            // 
+            this.ckbPerfectSame.AutoSize = true;
+            this.ckbPerfectSame.Location = new System.Drawing.Point(129, 116);
+            this.ckbPerfectSame.Name = "ckbPerfectSame";
+            this.ckbPerfectSame.Size = new System.Drawing.Size(72, 16);
+            this.ckbPerfectSame.TabIndex = 2500;
+            this.ckbPerfectSame.Text = "완전일치";
+            this.ckbPerfectSame.UseVisualStyleBackColor = true;
+            // 
+            // dgvFileList
+            // 
+            this.dgvFileList.AllowUserToOrderColumns = true;
+            this.dgvFileList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvFileList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.FileName,
+            this.Pass,
+            this.FullPass,
+            this.FileSelected});
+            this.dgvFileList.Location = new System.Drawing.Point(17, 225);
+            this.dgvFileList.Name = "dgvFileList";
+            this.dgvFileList.RowTemplate.Height = 23;
+            this.dgvFileList.Size = new System.Drawing.Size(577, 469);
+            this.dgvFileList.TabIndex = 3000;
+            // 
+            // FileName
+            // 
+            this.FileName.HeaderText = "이름";
+            this.FileName.Name = "FileName";
+            this.FileName.Width = 150;
+            // 
+            // Pass
+            // 
+            this.Pass.HeaderText = "패스";
+            this.Pass.Name = "Pass";
+            this.Pass.Width = 150;
+            // 
+            // FullPass
+            // 
+            this.FullPass.HeaderText = "풀패스";
+            this.FullPass.Name = "FullPass";
+            this.FullPass.Width = 150;
+            // 
+            // FileSelected
+            // 
+            this.FileSelected.HeaderText = "선택";
+            this.FileSelected.Name = "FileSelected";
+            this.FileSelected.Width = 50;
+            // 
+            // cbxSearchText
+            // 
+            this.cbxSearchText.Enabled = false;
+            this.cbxSearchText.FormattingEnabled = true;
+            this.cbxSearchText.Location = new System.Drawing.Point(17, 138);
+            this.cbxSearchText.Name = "cbxSearchText";
+            this.cbxSearchText.Size = new System.Drawing.Size(577, 20);
+            this.cbxSearchText.TabIndex = 2700;
+            // 
+            // lblSearchText
+            // 
+            this.lblSearchText.AutoSize = true;
+            this.lblSearchText.Location = new System.Drawing.Point(18, 120);
+            this.lblSearchText.Name = "lblSearchText";
+            this.lblSearchText.Size = new System.Drawing.Size(101, 12);
+            this.lblSearchText.TabIndex = 1032;
+            this.lblSearchText.Text = "검색 할 파일 입력";
+            // 
+            // ckbSearchSubfolders
+            // 
+            this.ckbSearchSubfolders.AutoSize = true;
+            this.ckbSearchSubfolders.Checked = true;
+            this.ckbSearchSubfolders.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ckbSearchSubfolders.Location = new System.Drawing.Point(191, 87);
+            this.ckbSearchSubfolders.Name = "ckbSearchSubfolders";
+            this.ckbSearchSubfolders.Size = new System.Drawing.Size(116, 16);
+            this.ckbSearchSubfolders.TabIndex = 2400;
+            this.ckbSearchSubfolders.Text = "서브 폴더도 적용";
+            this.ckbSearchSubfolders.UseVisualStyleBackColor = true;
+            // 
+            // cbxSearchFileExt
+            // 
+            this.cbxSearchFileExt.DisplayMember = "0";
+            this.cbxSearchFileExt.FormattingEnabled = true;
+            this.cbxSearchFileExt.Items.AddRange(new object[] {
+            "*.*",
+            "*.alz",
+            "*.lzh",
+            "*.rar",
+            "*.z",
+            "*.zip",
+            "*.BMP",
+            "*.GIF",
+            "*.Ico",
+            "*.JPEG",
+            "*.PNG",
+            "*.psd",
+            "*.tif",
+            "*.tiff",
+            "*.WebP",
+            "*.Tga",
+            "*.alz;*.lzh;*.rar;*.z;*.zip;",
+            "*.arw;*.BMP;*.cr2;*.crw;*.dng;*.GIF;*.icns;*.Ico;*.JPEG;*.mrw;*.nef;*.orf;*.pef;*" +
+                ".PNG;*.ppm;*.psd;*.raf;*.raw;*.tif;*.tiff;*.WebP;*.x3f;*.xcf;",
+            "*.AI;*.cdr;*.cgm;*.emf;*.SVG;*.vsd;*.wmf;"});
+            this.cbxSearchFileExt.Location = new System.Drawing.Point(101, 87);
+            this.cbxSearchFileExt.Name = "cbxSearchFileExt";
+            this.cbxSearchFileExt.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.cbxSearchFileExt.Size = new System.Drawing.Size(74, 20);
+            this.cbxSearchFileExt.TabIndex = 2300;
+            // 
+            // cbxSearchFolder
+            // 
+            this.cbxSearchFolder.FormattingEnabled = true;
+            this.cbxSearchFolder.Location = new System.Drawing.Point(18, 35);
+            this.cbxSearchFolder.Name = "cbxSearchFolder";
+            this.cbxSearchFolder.Size = new System.Drawing.Size(495, 20);
+            this.cbxSearchFolder.TabIndex = 2000;
+            // 
+            // lblSearchFileExt
+            // 
+            this.lblSearchFileExt.AutoSize = true;
+            this.lblSearchFileExt.Location = new System.Drawing.Point(18, 72);
+            this.lblSearchFileExt.Name = "lblSearchFileExt";
+            this.lblSearchFileExt.Size = new System.Drawing.Size(57, 12);
+            this.lblSearchFileExt.TabIndex = 1032;
+            this.lblSearchFileExt.Text = "파일 형식";
+            // 
+            // btnSearchFolder
+            // 
+            this.btnSearchFolder.Location = new System.Drawing.Point(519, 35);
+            this.btnSearchFolder.Name = "btnSearchFolder";
+            this.btnSearchFolder.Size = new System.Drawing.Size(75, 23);
+            this.btnSearchFolder.TabIndex = 2100;
+            this.btnSearchFolder.Text = "폴더 선택";
+            this.btnSearchFolder.UseVisualStyleBackColor = true;
+            this.btnSearchFolder.Click += new System.EventHandler(this.btnSearchFolder_Click);
+            // 
+            // txtSearchFileExt
+            // 
+            this.txtSearchFileExt.Location = new System.Drawing.Point(19, 87);
+            this.txtSearchFileExt.Name = "txtSearchFileExt";
+            this.txtSearchFileExt.Size = new System.Drawing.Size(76, 21);
+            this.txtSearchFileExt.TabIndex = 2200;
+            this.txtSearchFileExt.Text = "*.*";
+            this.txtSearchFileExt.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // lblSearchPanal
+            // 
+            this.lblSearchPanal.AutoSize = true;
+            this.lblSearchPanal.Location = new System.Drawing.Point(16, 11);
+            this.lblSearchPanal.Name = "lblSearchPanal";
+            this.lblSearchPanal.Size = new System.Drawing.Size(57, 12);
+            this.lblSearchPanal.TabIndex = 1032;
+            this.lblSearchPanal.Text = "파일 검색";
+            // 
+            // ckbIsFolderNameChange
+            // 
+            this.ckbIsFolderNameChange.AutoSize = true;
+            this.ckbIsFolderNameChange.Location = new System.Drawing.Point(318, 85);
+            this.ckbIsFolderNameChange.Name = "ckbIsFolderNameChange";
+            this.ckbIsFolderNameChange.Size = new System.Drawing.Size(88, 16);
+            this.ckbIsFolderNameChange.TabIndex = 1032;
+            this.ckbIsFolderNameChange.Text = "폴더명 변경";
+            this.ckbIsFolderNameChange.UseVisualStyleBackColor = true;
+            // 
+            // ckbIsFileNameChange
+            // 
+            this.ckbIsFileNameChange.AutoSize = true;
+            this.ckbIsFileNameChange.Location = new System.Drawing.Point(185, 85);
+            this.ckbIsFileNameChange.Name = "ckbIsFileNameChange";
+            this.ckbIsFileNameChange.Size = new System.Drawing.Size(88, 16);
+            this.ckbIsFileNameChange.TabIndex = 1033;
+            this.ckbIsFileNameChange.Text = "파일명 변경";
+            this.ckbIsFileNameChange.UseVisualStyleBackColor = true;
+            // 
             // ChangeName
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(560, 742);
+            this.ClientSize = new System.Drawing.Size(572, 742);
+            this.Controls.Add(this.ckbIsFileNameChange);
+            this.Controls.Add(this.ckbIsFolderNameChange);
+            this.Controls.Add(this.pnlSearch);
             this.Controls.Add(this.ckbTextChange);
             this.Controls.Add(this.ckbPositionChangeLast);
             this.Controls.Add(this.ckbPositionChangeFirst);
@@ -590,6 +903,11 @@
             this.gpbCount.PerformLayout();
             this.gpbPositionChange.ResumeLayout(false);
             this.gpbPositionChange.PerformLayout();
+            this.pnlSearch.ResumeLayout(false);
+            this.pnlSearch.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvFileList)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -638,6 +956,32 @@
         private System.Windows.Forms.CheckBox ckbPositionChangeFirst;
         private System.Windows.Forms.CheckBox ckbPositionChangeLast;
         private System.Windows.Forms.CheckBox ckbTextChange;
+        private System.Windows.Forms.Panel pnlSearch;
+        private System.Windows.Forms.DataGridView dgvFileList;
+        private System.Windows.Forms.ComboBox cbxSearchText;
+        private System.Windows.Forms.Label lblSearchText;
+        private System.Windows.Forms.CheckBox ckbSearchSubfolders;
+        private System.Windows.Forms.ComboBox cbxSearchFileExt;
+        private System.Windows.Forms.ComboBox cbxSearchFolder;
+        private System.Windows.Forms.Label lblSearchFileExt;
+        private System.Windows.Forms.Button btnSearchFolder;
+        private System.Windows.Forms.TextBox txtSearchFileExt;
+        private System.Windows.Forms.Label lblSearchPanal;
+        private System.Windows.Forms.CheckBox ckbSpaceIgnore;
+        private System.Windows.Forms.CheckBox ckbPerfectSame;
+        private System.Windows.Forms.Button btnFileDelete;
+        private System.Windows.Forms.Button btnPassDelete;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.CheckBox ckbSearchTargetFullPass;
+        private System.Windows.Forms.CheckBox ckbSearchTargetPass;
+        private System.Windows.Forms.CheckBox ckbSearchTargetName;
+        private System.Windows.Forms.Label lblSearchTarget;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FileName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Pass;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FullPass;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn FileSelected;
+        private System.Windows.Forms.CheckBox ckbIsFolderNameChange;
+        private System.Windows.Forms.CheckBox ckbIsFileNameChange;
     }
 }
 

@@ -12,6 +12,7 @@ namespace 간단한_이름_바꾸기
 {
     public partial class BeingProcessed : Form
     {
+        public bool IsFolder { get; set; } = false;
         public BeingProcessed()
         {
             InitializeComponent();
@@ -34,6 +35,16 @@ namespace 간단한_이름_바꾸기
         public void SetValue(int count)
         {
             pcbBeingProcessed.Value = count;
+        }
+
+        public int GetMaxCount()
+        {
+            return pcbBeingProcessed.Maximum;
+        }
+
+        public int GetValue()
+        {
+            return pcbBeingProcessed.Value;
         }
 
         public void SetCurrentFileName(string name)
