@@ -28,7 +28,7 @@ namespace 간단한_이름_바꾸기
         private const string COLUMN_ISSUBFOLDERS = "isSubFolders";
         private const string COLUMN_BEFORE_TEXT = "sBeforeText";
         private const string COLUMN_AFTER_TEXT = "sAfterText";
-
+        private const char SPLIT_TEXT = ':';
 
 
         
@@ -271,7 +271,11 @@ namespace 간단한_이름_바꾸기
                     }
                     else
                     {
-                        fileName = fileName.Replace(cbxBeforeText.Text, cbxAfterText.Text);
+                        var texts = cbxBeforeText.Text.Split(SPLIT_TEXT);
+                        foreach(var text in texts)
+                        {
+                            fileName = fileName.Replace(text, cbxAfterText.Text);
+                        }
                     }
                 }
 

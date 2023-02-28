@@ -178,9 +178,9 @@
             this.lblBeforeText.AutoSize = true;
             this.lblBeforeText.Location = new System.Drawing.Point(11, 524);
             this.lblBeforeText.Name = "lblBeforeText";
-            this.lblBeforeText.Size = new System.Drawing.Size(73, 12);
+            this.lblBeforeText.Size = new System.Drawing.Size(159, 12);
             this.lblBeforeText.TabIndex = 20;
-            this.lblBeforeText.Text = "변경 전 문자";
+            this.lblBeforeText.Text = "변경 전 문자(: 로 복수 지정)";
             // 
             // lblAfterText
             // 
