@@ -245,8 +245,8 @@ namespace 간단한_이름_바꾸기
             int minCount = bp.GetValue();
             for (int i = 0; i < files.Count; i++)
             {
-                //  파일명
-                string fileName = GetFileName(files[i], false).Trim();
+                //  파일명,폴더명
+                string fileName = GetFileName(files[i], isFolder).Trim();
                 //  확장자
                 string ext = "";
                 if (!isFolder) ext = GetExt(files[i], true);
