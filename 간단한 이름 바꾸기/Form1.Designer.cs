@@ -96,6 +96,11 @@
             this.lblSearchPanal = new System.Windows.Forms.Label();
             this.ckbIsFolderNameChange = new System.Windows.Forms.CheckBox();
             this.ckbIsFileNameChange = new System.Windows.Forms.CheckBox();
+            this.cbxCountIndexOf = new System.Windows.Forms.ComboBox();
+            this.lblCountIndexOf = new System.Windows.Forms.Label();
+            this.rdbIndexOf = new System.Windows.Forms.RadioButton();
+            this.cbxCountLastIndexOf = new System.Windows.Forms.ComboBox();
+            this.lblCountLastIndexOf = new System.Windows.Forms.Label();
             this.gpbCount.SuspendLayout();
             this.gpbPositionChange.SuspendLayout();
             this.pnlSearch.SuspendLayout();
@@ -176,7 +181,7 @@
             // lblBeforeText
             // 
             this.lblBeforeText.AutoSize = true;
-            this.lblBeforeText.Location = new System.Drawing.Point(11, 524);
+            this.lblBeforeText.Location = new System.Drawing.Point(10, 618);
             this.lblBeforeText.Name = "lblBeforeText";
             this.lblBeforeText.Size = new System.Drawing.Size(159, 12);
             this.lblBeforeText.TabIndex = 20;
@@ -185,7 +190,7 @@
             // lblAfterText
             // 
             this.lblAfterText.AutoSize = true;
-            this.lblAfterText.Location = new System.Drawing.Point(12, 578);
+            this.lblAfterText.Location = new System.Drawing.Point(11, 672);
             this.lblAfterText.Name = "lblAfterText";
             this.lblAfterText.Size = new System.Drawing.Size(77, 12);
             this.lblAfterText.TabIndex = 22;
@@ -193,7 +198,7 @@
             // 
             // btnCalcel
             // 
-            this.btnCalcel.Location = new System.Drawing.Point(373, 633);
+            this.btnCalcel.Location = new System.Drawing.Point(372, 727);
             this.btnCalcel.Name = "btnCalcel";
             this.btnCalcel.Size = new System.Drawing.Size(75, 23);
             this.btnCalcel.TabIndex = 1020;
@@ -203,7 +208,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(468, 633);
+            this.btnOK.Location = new System.Drawing.Point(467, 727);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 1030;
@@ -269,7 +274,7 @@
             // lblCountHead
             // 
             this.lblCountHead.AutoSize = true;
-            this.lblCountHead.Location = new System.Drawing.Point(11, 276);
+            this.lblCountHead.Location = new System.Drawing.Point(10, 277);
             this.lblCountHead.Name = "lblCountHead";
             this.lblCountHead.Size = new System.Drawing.Size(81, 12);
             this.lblCountHead.TabIndex = 16;
@@ -278,30 +283,29 @@
             // rdbHead
             // 
             this.rdbHead.AutoSize = true;
-            this.rdbHead.Location = new System.Drawing.Point(6, 11);
+            this.rdbHead.Location = new System.Drawing.Point(106, 11);
             this.rdbHead.Name = "rdbHead";
             this.rdbHead.Size = new System.Drawing.Size(75, 16);
             this.rdbHead.TabIndex = 140;
-            this.rdbHead.TabStop = true;
             this.rdbHead.Text = "앞에 달기";
             this.rdbHead.UseVisualStyleBackColor = true;
+            this.rdbHead.CheckedChanged += new System.EventHandler(this.rdbHead_CheckedChanged);
             // 
             // rdbTail
             // 
             this.rdbTail.AutoSize = true;
-            this.rdbTail.Checked = true;
-            this.rdbTail.Location = new System.Drawing.Point(87, 11);
+            this.rdbTail.Location = new System.Drawing.Point(187, 11);
             this.rdbTail.Name = "rdbTail";
             this.rdbTail.Size = new System.Drawing.Size(75, 16);
             this.rdbTail.TabIndex = 150;
-            this.rdbTail.TabStop = true;
             this.rdbTail.Text = "뒤에 달기";
             this.rdbTail.UseVisualStyleBackColor = true;
+            this.rdbTail.CheckedChanged += new System.EventHandler(this.rdbTail_CheckedChanged);
             // 
             // lblCountTail
             // 
             this.lblCountTail.AutoSize = true;
-            this.lblCountTail.Location = new System.Drawing.Point(11, 319);
+            this.lblCountTail.Location = new System.Drawing.Point(10, 320);
             this.lblCountTail.Name = "lblCountTail";
             this.lblCountTail.Size = new System.Drawing.Size(81, 12);
             this.lblCountTail.TabIndex = 18;
@@ -309,19 +313,20 @@
             // 
             // gpbCount
             // 
+            this.gpbCount.Controls.Add(this.rdbIndexOf);
             this.gpbCount.Controls.Add(this.rdbHead);
             this.gpbCount.Controls.Add(this.rdbTail);
             this.gpbCount.Enabled = false;
             this.gpbCount.Location = new System.Drawing.Point(116, 238);
             this.gpbCount.Name = "gpbCount";
-            this.gpbCount.Size = new System.Drawing.Size(168, 35);
+            this.gpbCount.Size = new System.Drawing.Size(277, 35);
             this.gpbCount.TabIndex = 25;
             this.gpbCount.TabStop = false;
             // 
             // lblCountNumber
             // 
             this.lblCountNumber.AutoSize = true;
-            this.lblCountNumber.Location = new System.Drawing.Point(306, 252);
+            this.lblCountNumber.Location = new System.Drawing.Point(399, 251);
             this.lblCountNumber.Name = "lblCountNumber";
             this.lblCountNumber.Size = new System.Drawing.Size(81, 12);
             this.lblCountNumber.TabIndex = 14;
@@ -357,7 +362,7 @@
             // 
             this.cbxCountHead.Enabled = false;
             this.cbxCountHead.FormattingEnabled = true;
-            this.cbxCountHead.Location = new System.Drawing.Point(12, 291);
+            this.cbxCountHead.Location = new System.Drawing.Point(11, 292);
             this.cbxCountHead.Name = "cbxCountHead";
             this.cbxCountHead.Size = new System.Drawing.Size(531, 20);
             this.cbxCountHead.TabIndex = 170;
@@ -387,7 +392,7 @@
             "18",
             "19",
             "20"});
-            this.cbxCountNumber.Location = new System.Drawing.Point(393, 249);
+            this.cbxCountNumber.Location = new System.Drawing.Point(486, 248);
             this.cbxCountNumber.Name = "cbxCountNumber";
             this.cbxCountNumber.Size = new System.Drawing.Size(56, 20);
             this.cbxCountNumber.TabIndex = 160;
@@ -396,7 +401,7 @@
             // 
             this.cbxCountTail.Enabled = false;
             this.cbxCountTail.FormattingEnabled = true;
-            this.cbxCountTail.Location = new System.Drawing.Point(12, 334);
+            this.cbxCountTail.Location = new System.Drawing.Point(11, 335);
             this.cbxCountTail.Name = "cbxCountTail";
             this.cbxCountTail.Size = new System.Drawing.Size(531, 20);
             this.cbxCountTail.TabIndex = 180;
@@ -404,7 +409,7 @@
             // cbxBeforeText
             // 
             this.cbxBeforeText.FormattingEnabled = true;
-            this.cbxBeforeText.Location = new System.Drawing.Point(13, 539);
+            this.cbxBeforeText.Location = new System.Drawing.Point(12, 633);
             this.cbxBeforeText.Name = "cbxBeforeText";
             this.cbxBeforeText.Size = new System.Drawing.Size(531, 20);
             this.cbxBeforeText.TabIndex = 1000;
@@ -412,7 +417,7 @@
             // cbxAfterText
             // 
             this.cbxAfterText.FormattingEnabled = true;
-            this.cbxAfterText.Location = new System.Drawing.Point(12, 593);
+            this.cbxAfterText.Location = new System.Drawing.Point(11, 687);
             this.cbxAfterText.Name = "cbxAfterText";
             this.cbxAfterText.Size = new System.Drawing.Size(531, 20);
             this.cbxAfterText.TabIndex = 1010;
@@ -457,7 +462,7 @@
             // 
             this.cbxPositionChangeEnd.Enabled = false;
             this.cbxPositionChangeEnd.FormattingEnabled = true;
-            this.cbxPositionChangeEnd.Location = new System.Drawing.Point(11, 458);
+            this.cbxPositionChangeEnd.Location = new System.Drawing.Point(10, 552);
             this.cbxPositionChangeEnd.Name = "cbxPositionChangeEnd";
             this.cbxPositionChangeEnd.Size = new System.Drawing.Size(531, 20);
             this.cbxPositionChangeEnd.TabIndex = 230;
@@ -466,7 +471,7 @@
             // 
             this.cbxPositionChangeStart.Enabled = false;
             this.cbxPositionChangeStart.FormattingEnabled = true;
-            this.cbxPositionChangeStart.Location = new System.Drawing.Point(11, 415);
+            this.cbxPositionChangeStart.Location = new System.Drawing.Point(10, 509);
             this.cbxPositionChangeStart.Name = "cbxPositionChangeStart";
             this.cbxPositionChangeStart.Size = new System.Drawing.Size(531, 20);
             this.cbxPositionChangeStart.TabIndex = 220;
@@ -474,7 +479,7 @@
             // lblPositionChangeEnd
             // 
             this.lblPositionChangeEnd.AutoSize = true;
-            this.lblPositionChangeEnd.Location = new System.Drawing.Point(10, 443);
+            this.lblPositionChangeEnd.Location = new System.Drawing.Point(9, 537);
             this.lblPositionChangeEnd.Name = "lblPositionChangeEnd";
             this.lblPositionChangeEnd.Size = new System.Drawing.Size(73, 12);
             this.lblPositionChangeEnd.TabIndex = 31;
@@ -483,7 +488,7 @@
             // ckbPositionChange
             // 
             this.ckbPositionChange.AutoSize = true;
-            this.ckbPositionChange.Location = new System.Drawing.Point(12, 371);
+            this.ckbPositionChange.Location = new System.Drawing.Point(11, 465);
             this.ckbPositionChange.Name = "ckbPositionChange";
             this.ckbPositionChange.Size = new System.Drawing.Size(104, 16);
             this.ckbPositionChange.TabIndex = 190;
@@ -494,7 +499,7 @@
             // lblPositionChangeStart
             // 
             this.lblPositionChangeStart.AutoSize = true;
-            this.lblPositionChangeStart.Location = new System.Drawing.Point(10, 400);
+            this.lblPositionChangeStart.Location = new System.Drawing.Point(9, 494);
             this.lblPositionChangeStart.Name = "lblPositionChangeStart";
             this.lblPositionChangeStart.Size = new System.Drawing.Size(85, 12);
             this.lblPositionChangeStart.TabIndex = 28;
@@ -505,7 +510,7 @@
             this.gpbPositionChange.Controls.Add(this.rdbPositionChangeFirst);
             this.gpbPositionChange.Controls.Add(this.rdbPositionChangeLast);
             this.gpbPositionChange.Enabled = false;
-            this.gpbPositionChange.Location = new System.Drawing.Point(122, 360);
+            this.gpbPositionChange.Location = new System.Drawing.Point(121, 454);
             this.gpbPositionChange.Name = "gpbPositionChange";
             this.gpbPositionChange.Size = new System.Drawing.Size(168, 35);
             this.gpbPositionChange.TabIndex = 195;
@@ -538,7 +543,7 @@
             // 
             this.ckbPositionChangeFirst.AutoSize = true;
             this.ckbPositionChangeFirst.Enabled = false;
-            this.ckbPositionChangeFirst.Location = new System.Drawing.Point(318, 371);
+            this.ckbPositionChangeFirst.Location = new System.Drawing.Point(317, 465);
             this.ckbPositionChangeFirst.Name = "ckbPositionChangeFirst";
             this.ckbPositionChangeFirst.Size = new System.Drawing.Size(60, 16);
             this.ckbPositionChangeFirst.TabIndex = 213;
@@ -550,7 +555,7 @@
             // 
             this.ckbPositionChangeLast.AutoSize = true;
             this.ckbPositionChangeLast.Enabled = false;
-            this.ckbPositionChangeLast.Location = new System.Drawing.Point(389, 371);
+            this.ckbPositionChangeLast.Location = new System.Drawing.Point(388, 465);
             this.ckbPositionChangeLast.Name = "ckbPositionChangeLast";
             this.ckbPositionChangeLast.Size = new System.Drawing.Size(48, 16);
             this.ckbPositionChangeLast.TabIndex = 216;
@@ -563,7 +568,7 @@
             this.ckbTextChange.AutoSize = true;
             this.ckbTextChange.Checked = true;
             this.ckbTextChange.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ckbTextChange.Location = new System.Drawing.Point(11, 496);
+            this.ckbTextChange.Location = new System.Drawing.Point(10, 590);
             this.ckbTextChange.Name = "ckbTextChange";
             this.ckbTextChange.Size = new System.Drawing.Size(76, 16);
             this.ckbTextChange.TabIndex = 950;
@@ -852,11 +857,64 @@
             this.ckbIsFileNameChange.Text = "파일명 변경";
             this.ckbIsFileNameChange.UseVisualStyleBackColor = true;
             // 
+            // cbxCountIndexOf
+            // 
+            this.cbxCountIndexOf.Enabled = false;
+            this.cbxCountIndexOf.FormattingEnabled = true;
+            this.cbxCountIndexOf.Location = new System.Drawing.Point(12, 382);
+            this.cbxCountIndexOf.Name = "cbxCountIndexOf";
+            this.cbxCountIndexOf.Size = new System.Drawing.Size(531, 20);
+            this.cbxCountIndexOf.TabIndex = 1035;
+            // 
+            // lblCountIndexOf
+            // 
+            this.lblCountIndexOf.AutoSize = true;
+            this.lblCountIndexOf.Location = new System.Drawing.Point(11, 367);
+            this.lblCountIndexOf.Name = "lblCountIndexOf";
+            this.lblCountIndexOf.Size = new System.Drawing.Size(137, 12);
+            this.lblCountIndexOf.TabIndex = 1034;
+            this.lblCountIndexOf.Text = "카운트 앞부분 위치 지정";
+            // 
+            // rdbIndexOf
+            // 
+            this.rdbIndexOf.AutoSize = true;
+            this.rdbIndexOf.Checked = true;
+            this.rdbIndexOf.Location = new System.Drawing.Point(12, 13);
+            this.rdbIndexOf.Name = "rdbIndexOf";
+            this.rdbIndexOf.Size = new System.Drawing.Size(87, 16);
+            this.rdbIndexOf.TabIndex = 151;
+            this.rdbIndexOf.TabStop = true;
+            this.rdbIndexOf.Text = "카운트 수정";
+            this.rdbIndexOf.UseVisualStyleBackColor = true;
+            this.rdbIndexOf.CheckedChanged += new System.EventHandler(this.rdbIndexOf_CheckedChanged);
+            // 
+            // cbxCountLastIndexOf
+            // 
+            this.cbxCountLastIndexOf.Enabled = false;
+            this.cbxCountLastIndexOf.FormattingEnabled = true;
+            this.cbxCountLastIndexOf.Location = new System.Drawing.Point(11, 425);
+            this.cbxCountLastIndexOf.Name = "cbxCountLastIndexOf";
+            this.cbxCountLastIndexOf.Size = new System.Drawing.Size(531, 20);
+            this.cbxCountLastIndexOf.TabIndex = 1037;
+            // 
+            // lblCountLastIndexOf
+            // 
+            this.lblCountLastIndexOf.AutoSize = true;
+            this.lblCountLastIndexOf.Location = new System.Drawing.Point(10, 410);
+            this.lblCountLastIndexOf.Name = "lblCountLastIndexOf";
+            this.lblCountLastIndexOf.Size = new System.Drawing.Size(137, 12);
+            this.lblCountLastIndexOf.TabIndex = 1036;
+            this.lblCountLastIndexOf.Text = "카운트 뒷부분 위치 지정";
+            // 
             // ChangeName
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(572, 742);
+            this.ClientSize = new System.Drawing.Size(572, 813);
+            this.Controls.Add(this.cbxCountLastIndexOf);
+            this.Controls.Add(this.lblCountLastIndexOf);
+            this.Controls.Add(this.cbxCountIndexOf);
+            this.Controls.Add(this.lblCountIndexOf);
             this.Controls.Add(this.ckbIsFileNameChange);
             this.Controls.Add(this.ckbIsFolderNameChange);
             this.Controls.Add(this.pnlSearch);
@@ -982,6 +1040,11 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn FileSelected;
         private System.Windows.Forms.CheckBox ckbIsFolderNameChange;
         private System.Windows.Forms.CheckBox ckbIsFileNameChange;
+        private System.Windows.Forms.ComboBox cbxCountIndexOf;
+        private System.Windows.Forms.Label lblCountIndexOf;
+        private System.Windows.Forms.RadioButton rdbIndexOf;
+        private System.Windows.Forms.ComboBox cbxCountLastIndexOf;
+        private System.Windows.Forms.Label lblCountLastIndexOf;
     }
 }
 

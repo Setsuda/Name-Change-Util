@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using 간단한_이름_바꾸기.Enums;
 
 namespace 간단한_이름_바꾸기.Models
 {
@@ -35,13 +36,17 @@ namespace 간단한_이름_바꾸기.Models
         /// <summary>카운트 사용판단 </summary>
         public bool isCount = false;
         /// <summary>카운트 위치 판단 </summary>
-        public bool isCountBack = false;
+        public CountPositionEnum countPostion = CountPositionEnum.IndexOf;
         /// <summary>카운트 자릿수 </summary>
         public string CountNumber = "";
         /// <summary>카운트 머릿말 </summary>
         public string CountHead = "";
         /// <summary>카운트 꼬릿말 </summary>
         public string CountTail = "";
+        /// <summary>카운트 앞위치 판단 </summary>
+        public string CountIndexOf = "";
+        /// <summary>카운트 뒷위치 판단 </summary>
+        public string CountLastIndexOf = "";
 
         /// <summary>구간 위치 변경 사용판단 </summary>
         public bool isPositionChange = false;
