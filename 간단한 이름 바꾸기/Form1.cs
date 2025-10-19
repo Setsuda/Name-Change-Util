@@ -8,6 +8,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
 using 간단한_이름_바꾸기.Models;
 using 간단한_이름_바꾸기.Logic;
+using 간단한_이름_바꾸기.Enums;
+using 간단한_이름_바꾸기.Utils;
 
 namespace 간단한_이름_바꾸기
 {
@@ -77,7 +79,7 @@ namespace 간단한_이름_바꾸기
 
             //  configData 불러오기
             ConfigDataLoad();
-            
+            //CountRadioButtonSwitch();
             //  인스턴스 설정
             instance = this;
         }
@@ -239,6 +241,13 @@ namespace 간단한_이름_바꾸기
 
         }
 
+        /// <summary>
+        /// 이름 변경 처리
+        /// </summary>
+        /// <param name="count"></param>
+        /// <param name="failedCount"></param>
+        /// <param name="files"></param>
+        /// <param name="isFolder"></param>
         private void NameChangeProc(ref int count, ref int failedCount, IList<string> files, bool isFolder)
         {
             if (isFolder) files = Logic.ListSortChange(files);
@@ -352,7 +361,36 @@ namespace 간단한_이름_바꾸기
                     StringBuilder sb = new StringBuilder();
 
                     //  제일 앞부분에 추가
-                    if (rdbHead.Checked)
+                    if (rdbIndexOf.Checked)
+                    {
+                        //sb.Append(fileName);
+                        //sb.Append(cbxCountHead.Text);
+                        var index = fileName.IndexOf(cbxCountIndexOf.Text);
+                        if (index < 0) continue;
+                        index += cbxCountIndexOf.Text.Length;
+                        var lastIndex = fileName.IndexOf(cbxCountLastIndexOf.Text);
+                        if (lastIndex < 0) lastIndex = fileName.Length;
+
+                        sb.Append(cbxCountIndexOf.Text);
+
+                        string noStr = fileName.Substring(index, lastIndex - index);
+
+                        //  카운트
+                        StringBuilder num = new StringBuilder();
+                        num.Append(noStr);
+                        int number = int.Parse(cbxCountNumber.Text) - num.Length;
+                        if (number > 0)
+                        {
+                            for (int j = 0; j < number; j++)
+                            {
+                                num.Insert(0, "0");
+                            }
+                        }
+                        sb.Append(num.ToString());
+
+                        sb.Append(cbxCountLastIndexOf.Text);
+                    }
+                    else if (rdbHead.Checked)
                     {
                         sb.Append(cbxCountHead.Text);
 
@@ -507,8 +545,9 @@ namespace 간단한_이름_바꾸기
         /// <param name="e"></param>
         private void ckbCount_CheckedChanged(object sender, EventArgs e)
         {
-            cbxCountHead.Enabled = ckbCount.Checked;
-            cbxCountTail.Enabled = ckbCount.Checked;
+            //cbxCountHead.Enabled = ckbCount.Checked;
+            //cbxCountTail.Enabled = ckbCount.Checked;
+            CountRadioButtonSwitch();
             cbxCountNumber.Enabled = ckbCount.Checked;
             gpbCount.Enabled = ckbCount.Checked;
 
@@ -666,16 +705,23 @@ namespace 간단한_이름_바꾸기
 
             //  카운트 체크
             ckbCount.Checked = ConfigData.isCount;
-            //  카운트 위치 체크(머리)
-            rdbHead.Checked = !ConfigData.isCountBack;
-            //  카운트 위치 체크(꼬리)
-            rdbTail.Checked = ConfigData.isCountBack;
+            //  카운트 위치 지정
+            rdbIndexOf.Checked = ConfigData.countPostion == Enums.CountPositionEnum.IndexOf || ConfigData.countPostion == Enums.CountPositionEnum.None;
+            //  카운트 위치(머리)
+            rdbHead.Checked = ConfigData.countPostion == Enums.CountPositionEnum.Head;
+            //  카운트 위치(꼬리)
+            rdbTail.Checked = ConfigData.countPostion == Enums.CountPositionEnum.Tail;
             //  카운트 자릿수 이력
             AddComboxData(ConfigData.lstCountNumber, cbxCountNumber);
             //  카운트 머릿말 이력
             AddComboxData(ConfigData.lstCountHead, cbxCountHead);
             //  카운트 꼬릿말 이력
             AddComboxData(ConfigData.lstCountTail, cbxCountTail);
+            //  카운트 앞위치 이력
+            AddComboxData(ConfigData.lstCountIndexOf, cbxCountIndexOf);
+            //  카운트 뒷위치 이력
+            AddComboxData(ConfigData.lstCountLastIndexOf, cbxCountLastIndexOf);
+
 
             //  구간 위치 변경 체크
             ckbPositionChange.Checked = ConfigData.isPositionChange;
@@ -708,6 +754,7 @@ namespace 간단한_이름_바꾸기
         private void AddComboxData(List<string> list, ComboBox comboBox)
         {
             comboBox.Items.Clear();
+            if (list.IsNullOrEmpty()) return;
             for (int i = 0; i < list.Count; i++)
             {
                 comboBox.Items.Add(list[i]);
@@ -774,8 +821,10 @@ namespace 간단한_이름_바꾸기
 
             //  카운트 체크
             con.isCount = ckbCount.Checked;
-            //  카운트 위치 체크(꼬리)
-            con.isCountBack = rdbTail.Checked;
+
+            //  카운트 위치 체크
+
+            con.countPostion = GetCountPositionEnum();
             //  카운트 자릿수 이력
             AddListData(con.lstCountNumber, cbxCountNumber);
 
@@ -784,6 +833,12 @@ namespace 간단한_이름_바꾸기
 
             //  카운트 꼬릿말 이력
             AddListData(con.lstCountTail, cbxCountTail);
+
+            //  카운트 앞위치 이력
+            AddListData(con.lstCountIndexOf, cbxCountIndexOf);
+
+            //  카운트 뒷위치 이력
+            AddListData(con.lstCountLastIndexOf, cbxCountLastIndexOf);
 
             //  구간 위치 변경 체크
             con.isPositionChange = ckbPositionChange.Checked;
@@ -1043,6 +1098,54 @@ namespace 간단한_이름_바꾸기
 
         private void btnFileDelete_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void rdbIndexOf_CheckedChanged(object sender, EventArgs e)
+        {
+            CountRadioButtonSwitch();
+
+        }
+
+        private void rdbHead_CheckedChanged(object sender, EventArgs e)
+        {
+            CountRadioButtonSwitch();
+
+        }
+
+        private void rdbTail_CheckedChanged(object sender, EventArgs e)
+        {
+            CountRadioButtonSwitch();
+        }
+
+        private void CountRadioButtonSwitch()
+        {
+            cbxCountIndexOf.Enabled = false;
+            cbxCountLastIndexOf.Enabled = false;
+            cbxCountHead.Enabled = false;
+            cbxCountTail.Enabled = false;
+
+            if (rdbIndexOf.Checked)
+            {
+                cbxCountIndexOf.Enabled = true;
+                cbxCountLastIndexOf.Enabled = true;
+            }
+            if (rdbHead.Checked)
+            {
+                cbxCountHead.Enabled = true;
+            }
+            if (rdbTail.Checked)
+            {
+                cbxCountTail.Enabled = true;
+            }
+        }
+
+        private CountPositionEnum GetCountPositionEnum()
+        {
+            if (rdbIndexOf.Checked) return CountPositionEnum.IndexOf;
+            else if (rdbHead.Checked) return CountPositionEnum.Head;
+            //else if(rdbTail.Checked) return CountPositionEnum.Tail;
+            else return CountPositionEnum.Tail;
 
         }
     }
